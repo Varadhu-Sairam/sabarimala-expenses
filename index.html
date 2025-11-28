@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabarimala 2026 - Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B00 0%, #FF8C00 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            background: transparent;
+            font-size: 1.1em;
+        }
+
+        .tab:hover {
+            background: #e9ecef;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .participant-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .participant-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .participant-item span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .expense-list {
+            margin-top: 20px;
+        }
+
+        .expense-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+
+        .expense-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .expense-header h3 {
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        .expense-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .expense-details {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .settlement-section {
+            margin-top: 30px;
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .balance-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+
+        .balance-card.positive {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .balance-card.negative {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .balance-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .balance-amount {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .balance-amount.positive {
+            color: #28a745;
+        }
+
+        .balance-amount.negative {
+            color: #dc3545;
+        }
+
+        .settlement-list {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .settlement-item {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .settlement-item:last-child {
+            border-bottom: none;
+        }
+
+        .settlement-arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 0 20px;
+        }
+
+        .status-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .setup-instructions {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #ffc107;
+        }
+
+        .setup-instructions h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .setup-instructions ol {
+            margin-left: 20px;
+            color: #856404;
+        }
+
+        .setup-instructions li {
+            margin-bottom: 10px;
+        }
+
+        .api-config {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .balance-grid,
+            .participant-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🙏 Sabarimala 2026</h1>
+            <p>Expense & Settlement Tracker</p>
+        </div>
+
+        <div id="statusMessage"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('setup')">⚙️ Setup</button>
+            <button class="tab" onclick="switchTab('participants')">👥 Participants</button>
+            <button class="tab" onclick="switchTab('expenses')">💰 Expenses</button>
+            <button class="tab" onclick="switchTab('settlements')">🧮 Settlements</button>
+        </div>
+
+        <!-- Setup Tab -->
+        <div id="setup" class="tab-content active">
+            <div class="setup-instructions">
+                <h3>📋 Quick Setup Instructions</h3>
+                <ol>
+                    <li>Create a new Google Sheet</li>
+                    <li>Go to <strong>Extensions → Apps Script</strong></li>
+                    <li>Replace all code with the script provided in SETUP.md</li>
+                    <li>Click <strong>Deploy → New deployment → Web app</strong></li>
+                    <li>Set "Who has access" to <strong>Anyone</strong></li>
+                    <li>Copy the Web App URL and paste below</li>
+                </ol>
+            </div>
+
+            <div class="api-config">
+                <div class="form-group">
+                    <label>Google Apps Script Web App URL:</label>
+                    <input type="text" id="apiUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+                </div>
+                <button class="btn btn-success" onclick="saveApiUrl()">💾 Save & Connect</button>
+                <button class="btn btn-secondary" onclick="testConnection()">🔍 Test Connection</button>
+            </div>
+
+            <div id="connectionStatus"></div>
+        </div>
+
+        <!-- Participants Tab -->
+        <div id="participants" class="tab-content">
+            <h2>Manage Participants</h2>
+            
+            <div class="form-group">
+                <label>Add Participant:</label>
+                <input type="text" id="participantName" placeholder="Enter name">
+                <button class="btn btn-primary" onclick="addParticipant()" style="margin-top: 10px;">➕ Add Participant</button>
+            </div>
+
+            <div class="participant-list" id="participantList">
+                <!-- Participants will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Expenses Tab -->
+        <div id="expenses" class="tab-content">
+            <h2>Add New Expense</h2>
+            
+            <div class="form-group">
+                <label>Date:</label>
+                <input type="date" id="expenseDate">
+            </div>
+
+            <div class="form-group">
+                <label>Description:</label>
+                <input type="text" id="expenseDescription" placeholder="e.g., Dinner at restaurant">
+            </div>
+
+            <div class="form-group">
+                <label>Amount (₹):</label>
+                <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>Paid By:</label>
+                <select id="expensePaidBy">
+                    <option value="">Select...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Split Between:</label>
+                <div class="checkbox-group" id="splitBetweenCheckboxes">
+                    <!-- Checkboxes will be loaded here -->
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="addExpense()">💰 Add Expense</button>
+
+            <hr style="margin: 30px 0; border: 1px solid #dee2e6;">
+
+            <h2>All Expenses</h2>
+            <div class="expense-list" id="expenseList">
+                <!-- Expenses will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Settlements Tab -->
+        <div id="settlements" class="tab-content">
+            <h2>Balance Summary</h2>
+            <div class="balance-grid" id="balanceGrid">
+                <!-- Balances will be calculated here -->
+            </div>
+
+            <h2>Settlement Transactions</h2>
+            <div class="settlement-list" id="settlementList">
+                <!-- Settlement transactions will be calculated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let API_URL = localStorage.getItem('apiUrl') || '';
+        let participants = [];
+        let expenses = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default
+            document.getElementById('expenseDate').valueAsDate = new Date();
+            
+            // Load API URL if exists
+            if (API_URL) {
+                document.getElementById('apiUrl').value = API_URL;
+                loadAllData();
+            }
+        });
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Refresh data when switching to certain tabs
+            if (tabName === 'settlements') {
+                calculateSettlements();
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        function saveApiUrl() {
+            const url = document.getElementById('apiUrl').value.trim();
+            if (!url) {
+                showStatus('Please enter a valid URL', 'error');
+                return;
+            }
+            API_URL = url;
+            localStorage.setItem('apiUrl', url);
+            showStatus('API URL saved! Testing connection...', 'success');
+            testConnection();
+        }
+
+        async function testConnection() {
+            if (!API_URL) {
+                showStatus('Please enter and save the API URL first', 'error');
+                return;
+            }
+
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.innerHTML = '<div class="loading">Testing connection...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}?action=getParticipants`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.innerHTML = '<div class="status-message status-success">✅ Connected successfully!</div>';
+                    loadAllData();
+                } else {
+                    statusDiv.innerHTML = `<div class="status-message status-error">❌ Connection failed: ${data.error || 'Unknown error'}</div>`;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="status-message status-error">❌ Connection failed: ${error.message}</div>`;
+            }
+        }
+
+        async function loadAllData() {
+            await loadParticipants();
+            await loadExpenses();
+        }
+
+        async function loadParticipants() {
+            if (!API_URL) return;
+
+            try {
+                const response = await fetch(`${API_URL}?action=getParticipants`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    participants = data.participants || [];
+                    renderParticipants();
+                    updatePaidByDropdown();
+                    updateSplitCheckboxes();
+                }
+            } catch (error) {
+                console.error('Error loading participants:', error);
+            }
+        }
+
+        function renderParticipants() {
+            const listDiv = document.getElementById('participantList');
+            
+            if (participants.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; color: #666;">No participants yet. Add some above!</p>';
+                return;
+            }
+
+            listDiv.innerHTML = participants.map(name => `
+                <div class="participant-item">
+                    <span>${name}</span>
+                    <button class="btn btn-danger" onclick="removeParticipant('${name}')" style="padding: 5px 15px; margin: 0;">✕</button>
+                </div>
+            `).join('');
+        }
+
+        async function addParticipant() {
+            const nameInput = document.getElementById('participantName');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                showStatus('Please enter a name', 'error');
+                return;
+            }
+
+            if (participants.includes(name)) {
+                showStatus('Participant already exists', 'error');
+                return;
+            }
+
+            if (!API_URL) {
+                showStatus('Please configure API URL in Setup tab first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'addParticipant',
+                        name: name
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    participants.push(name);
+                    nameInput.value = '';
+                    renderParticipants();
+                    updatePaidByDropdown();
+                    updateSplitCheckboxes();
+                    showStatus('Participant added successfully!', 'success');
+                } else {
+                    showStatus('Error adding participant: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+
+        async function removeParticipant(name) {
+            if (!confirm(`Remove ${name} from participants?`)) return;
+
+            if (!API_URL) {
+                showStatus('Please configure API URL in Setup tab first', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'removeParticipant',
+                        name: name
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    participants = participants.filter(p => p !== name);
+                    renderParticipants();
+                    updatePaidByDropdown();
+                    updateSplitCheckboxes();
+                    showStatus('Participant removed successfully!', 'success');
+                } else {
+                    showStatus('Error removing participant: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+
+        function updatePaidByDropdown() {
+            const select = document.getElementById('expensePaidBy');
+            select.innerHTML = '<option value="">Select...</option>' + 
+                participants.map(name => `<option value="${name}">${name}</option>`).join('');
+        }
+
+        function updateSplitCheckboxes() {
+            const container = document.getElementById('splitBetweenCheckboxes');
+            
+            if (participants.length === 0) {
+                container.innerHTML = '<p style="color: #666;">Add participants first</p>';
+                return;
+            }
+
+            container.innerHTML = participants.map(name => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="split_${name}" value="${name}">
+                    <label for="split_${name}" style="margin: 0; cursor: pointer;">${name}</label>
+                </div>
+            `).join('');
+        }
+
+        async function loadExpenses() {
+            if (!API_URL) return;
+
+            try {
+                const response = await fetch(`${API_URL}?action=getExpenses`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    expenses = data.expenses || [];
+                    renderExpenses();
+                }
+            } catch (error) {
+                console.error('Error loading expenses:', error);
+            }
+        }
+
+        function renderExpenses() {
+            const listDiv = document.getElementById('expenseList');
+            
+            if (expenses.length === 0) {
+                listDiv.innerHTML = '<p style="text-align: center; color: #666;">No expenses yet. Add one above!</p>';
+                return;
+            }
+
+            listDiv.innerHTML = expenses.map(expense => `
+                <div class="expense-item">
+                    <div class="expense-header">
+                        <div>
+                            <h3>${expense.description}</h3>
+                            <div class="expense-details">
+                                <strong>${expense.date}</strong> • Paid by <strong>${expense.paidBy}</strong>
+                            </div>
+                            <div class="expense-details">
+                                Split between: ${expense.splitBetween.join(', ')}
+                            </div>
+                        </div>
+                        <div class="expense-amount">₹${parseFloat(expense.amount).toFixed(2)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function addExpense() {
+            const date = document.getElementById('expenseDate').value;
+            const description = document.getElementById('expenseDescription').value.trim();
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+            const paidBy = document.getElementById('expensePaidBy').value;
+
+            // Get checked participants
+            const splitBetween = [];
+            participants.forEach(name => {
+                const checkbox = document.getElementById(`split_${name}`);
+                if (checkbox && checkbox.checked) {
+                    splitBetween.push(name);
+                }
+            });
+
+            // Validation
+            if (!date || !description || !amount || !paidBy || splitBetween.length === 0) {
+                showStatus('Please fill all fields and select at least one person to split', 'error');
+                return;
+            }
+
+            if (!API_URL) {
+                showStatus('Please configure API URL in Setup tab first', 'error');
+                return;
+            }
+
+            const expense = {
+                date,
+                description,
+                amount,
+                paidBy,
+                splitBetween
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'addExpense',
+                        expense: expense
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    expenses.push(expense);
+                    
+                    // Clear form
+                    document.getElementById('expenseDescription').value = '';
+                    document.getElementById('expenseAmount').value = '';
+                    document.getElementById('expensePaidBy').value = '';
+                    participants.forEach(name => {
+                        const checkbox = document.getElementById(`split_${name}`);
+                        if (checkbox) checkbox.checked = false;
+                    });
+
+                    renderExpenses();
+                    showStatus('Expense added successfully!', 'success');
+                } else {
+                    showStatus('Error adding expense: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+
+        function calculateSettlements() {
+            const balances = {};
+            
+            // Initialize balances
+            participants.forEach(person => {
+                balances[person] = 0;
+            });
+
+            // Calculate balances
+            expenses.forEach(expense => {
+                const amount = parseFloat(expense.amount);
+                const splitCount = expense.splitBetween.length;
+                const sharePerPerson = amount / splitCount;
+
+                // Person who paid gets credited
+                balances[expense.paidBy] += amount;
+
+                // Everyone splitting owes their share
+                expense.splitBetween.forEach(person => {
+                    balances[person] -= sharePerPerson;
+                });
+            });
+
+            renderBalances(balances);
+            renderSettlementTransactions(balances);
+        }
+
+        function renderBalances(balances) {
+            const gridDiv = document.getElementById('balanceGrid');
+            
+            if (participants.length === 0) {
+                gridDiv.innerHTML = '<p style="text-align: center; color: #666;">No participants yet.</p>';
+                return;
+            }
+
+            gridDiv.innerHTML = participants.map(person => {
+                const balance = balances[person] || 0;
+                const isPositive = balance > 0;
+                const isNegative = balance < 0;
+                const cardClass = isPositive ? 'positive' : isNegative ? 'negative' : '';
+                const amountClass = isPositive ? 'positive' : isNegative ? 'negative' : '';
+                const sign = isPositive ? '+' : '';
+
+                return `
+                    <div class="balance-card ${cardClass}">
+                        <h3>${person}</h3>
+                        <div class="balance-amount ${amountClass}">
+                            ${sign}₹${Math.abs(balance).toFixed(2)}
+                        </div>
+                        <div style="margin-top: 10px; color: #666; font-size: 0.9em;">
+                            ${isPositive ? 'Should receive' : isNegative ? 'Should pay' : 'Settled up'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSettlementTransactions(balances) {
+            const listDiv = document.getElementById('settlementList');
+            
+            // Separate creditors and debtors
+            const creditors = [];
+            const debtors = [];
+
+            Object.entries(balances).forEach(([person, balance]) => {
+                if (balance > 0.01) {
+                    creditors.push({ person, amount: balance });
+                } else if (balance < -0.01) {
+                    debtors.push({ person, amount: Math.abs(balance) });
+                }
+            });
+
+            if (creditors.length === 0 && debtors.length === 0) {
+                listDiv.innerHTML = '<div class="status-message status-success">🎉 Everyone is settled up!</div>';
+                return;
+            }
+
+            // Calculate transactions
+            const transactions = [];
+            creditors.sort((a, b) => b.amount - a.amount);
+            debtors.sort((a, b) => b.amount - a.amount);
+
+            let i = 0, j = 0;
+            while (i < creditors.length && j < debtors.length) {
+                const creditor = creditors[i];
+                const debtor = debtors[j];
+                const amount = Math.min(creditor.amount, debtor.amount);
+
+                transactions.push({
+                    from: debtor.person,
+                    to: creditor.person,
+                    amount: amount
+                });
+
+                creditor.amount -= amount;
+                debtor.amount -= amount;
+
+                if (creditor.amount < 0.01) i++;
+                if (debtor.amount < 0.01) j++;
+            }
+
+            listDiv.innerHTML = transactions.map(t => `
+                <div class="settlement-item">
+                    <div style="font-size: 1.2em; font-weight: 600;">${t.from}</div>
+                    <div class="settlement-arrow">→</div>
+                    <div style="font-size: 1.2em; font-weight: 600;">${t.to}</div>
+                    <div style="font-size: 1.5em; font-weight: bold; color: #28a745;">₹${t.amount.toFixed(2)}</div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
