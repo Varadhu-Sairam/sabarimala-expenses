@@ -489,6 +489,10 @@
 
             <div class="form-group">
                 <label>Split Between:</label>
+                <div style="margin-bottom: 10px;">
+                    <button class="btn btn-secondary" onclick="selectAllSplit()" type="button" style="padding: 8px 20px;">✓ Select All</button>
+                    <button class="btn btn-secondary" onclick="deselectAllSplit()" type="button" style="padding: 8px 20px;">✗ Deselect All</button>
+                </div>
                 <div class="checkbox-group" id="splitBetweenCheckboxes">
                     <!-- Checkboxes will be loaded here -->
                 </div>
@@ -511,7 +515,8 @@
                 <!-- Balances will be calculated here -->
             </div>
 
-            <h2>Settlement Transactions</h2>
+            <h2>💸 Who Needs to Pay Whom</h2>
+            <p style="color: #666; margin-bottom: 20px;">Complete these transactions to settle all debts:</p>
             <div class="settlement-list" id="settlementList">
                 <!-- Settlement transactions will be calculated here -->
             </div>
@@ -920,7 +925,7 @@
             });
 
             if (creditors.length === 0 && debtors.length === 0) {
-                listDiv.innerHTML = '<div class="status-message status-success">🎉 Everyone is settled up!</div>';
+                listDiv.innerHTML = '<div class="status-message status-success">🎉 Everyone is settled up! No payments needed.</div>';
                 return;
             }
 
@@ -948,14 +953,37 @@
                 if (debtor.amount < 0.01) j++;
             }
 
-            listDiv.innerHTML = transactions.map(t => `
+            listDiv.innerHTML = transactions.map((t, index) => `
                 <div class="settlement-item">
-                    <div style="font-size: 1.2em; font-weight: 600;">${t.from}</div>
+                    <div style="flex: 1; text-align: left;">
+                        <div style="font-size: 1.3em; font-weight: 700; color: #dc3545;">${t.from}</div>
+                        <div style="font-size: 0.9em; color: #666; margin-top: 5px;">needs to pay</div>
+                    </div>
                     <div class="settlement-arrow">→</div>
-                    <div style="font-size: 1.2em; font-weight: 600;">${t.to}</div>
-                    <div style="font-size: 1.5em; font-weight: bold; color: #28a745;">₹${t.amount.toFixed(2)}</div>
+                    <div style="flex: 1; text-align: center;">
+                        <div style="font-size: 1.8em; font-weight: bold; color: #28a745;">₹${t.amount.toFixed(2)}</div>
+                    </div>
+                    <div class="settlement-arrow">→</div>
+                    <div style="flex: 1; text-align: right;">
+                        <div style="font-size: 1.3em; font-weight: 700; color: #28a745;">${t.to}</div>
+                        <div style="font-size: 0.9em; color: #666; margin-top: 5px;">will receive</div>
+                    </div>
                 </div>
             `).join('');
+        }
+
+        function selectAllSplit() {
+            participants.forEach(name => {
+                const checkbox = document.getElementById(`split_${name}`);
+                if (checkbox) checkbox.checked = true;
+            });
+        }
+
+        function deselectAllSplit() {
+            participants.forEach(name => {
+                const checkbox = document.getElementById(`split_${name}`);
+                if (checkbox) checkbox.checked = false;
+            });
         }
     </script>
 </body>
