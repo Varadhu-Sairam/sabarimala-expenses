@@ -35,6 +35,10 @@ function doPost(e) {
       return removeParticipant(data.name);
     } else if (action === 'addExpense') {
       return addExpense(data.expense);
+    } else if (action === 'updateExpense') {
+      return updateExpense(data.index, data.expense);
+    } else if (action === 'deleteExpense') {
+      return deleteExpense(data.index);
     }
     
     return ContentService.createTextOutput(JSON.stringify({
@@ -164,6 +168,55 @@ function addExpense(expense) {
     expense.paidBy,
     expense.splitBetween.join(', ')
   ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({
+    success: true
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function updateExpense(index, expense) {
+  const sheet = getOrCreateSheet('Expenses');
+  const data = sheet.getDataRange().getValues();
+  
+  // Calculate actual row (index + 2 because of header and 0-based index)
+  const rowNumber = index + 2;
+  
+  if (rowNumber > data.length) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: 'Expense not found'
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // Update the row
+  sheet.getRange(rowNumber, 1, 1, 5).setValues([[
+    expense.date,
+    expense.description,
+    expense.amount,
+    expense.paidBy,
+    expense.splitBetween.join(', ')
+  ]]);
+  
+  return ContentService.createTextOutput(JSON.stringify({
+    success: true
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
+function deleteExpense(index) {
+  const sheet = getOrCreateSheet('Expenses');
+  const data = sheet.getDataRange().getValues();
+  
+  // Calculate actual row (index + 2 because of header and 0-based index)
+  const rowNumber = index + 2;
+  
+  if (rowNumber > data.length) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: 'Expense not found'
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  sheet.deleteRow(rowNumber);
   
   return ContentService.createTextOutput(JSON.stringify({
     success: true
