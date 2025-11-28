@@ -11,7 +11,7 @@ A beautiful web application to track group expenses and automatically calculate 
 - ☁️ Data stored in Google Sheets (synced for everyone)
 - 🆓 Completely free to use
 
-## 🚀 Setup Instructions
+## 🚀 Setup Instructions (10 minutes total)
 
 ### Part 1: Google Sheets Backend Setup (5 minutes)
 
@@ -48,7 +48,16 @@ A beautiful web application to track group expenses and automatically calculate 
    - Click "Allow"
    - This is safe - you're authorizing your own script!
 
-### Part 2: Deploy Website to GitHub Pages (3 minutes)
+### Part 2: Update the HTML File (1 minute)
+
+1. **Open index.html in a Text Editor**
+   - Open the `index.html` file with any text editor (VS Code, Notepad++, TextEdit, etc.)
+   - Find line 628 that says: `const API_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';`
+   - Replace `PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE` with your actual Web App URL
+   - Example: `const API_URL = 'https://script.google.com/macros/s/AKfycby.../exec';`
+   - **Save the file**
+
+### Part 3: Deploy Website to GitHub Pages (3 minutes)
 
 1. **Create a GitHub Account** (if you don't have one)
    - Go to [GitHub.com](https://github.com)
@@ -58,13 +67,13 @@ A beautiful web application to track group expenses and automatically calculate 
    - Click the **+** icon in the top right → **New repository**
    - Repository name: `sabarimala-expenses` (or any name you like)
    - Description: "Sabarimala 2026 Expense Tracker"
-   - Make it **Public**
+   - Make it **Private** (keeps your code secure!)
    - Check ✅ "Add a README file"
    - Click **Create repository**
 
 3. **Upload the HTML File**
    - In your new repository, click **Add file** → **Upload files**
-   - Drag and drop the `index.html` file
+   - Drag and drop the **updated** `index.html` file (with your API URL)
    - Click **Commit changes**
 
 4. **Enable GitHub Pages**
@@ -76,25 +85,27 @@ A beautiful web application to track group expenses and automatically calculate 
 
 5. **Get Your Website URL**
    - Your site will be live at: `https://YOUR-USERNAME.github.io/sabarimala-expenses/`
-   - Copy this URL and share it with your group!
+   - **Copy this URL** and share it with your group!
+   - Note: Even though the repo is private, GitHub Pages URL is publicly accessible
 
-### Part 3: Connect Everything (1 minute)
+### Part 4: Start Using! (Ready to go!)
 
-1. **Open Your Website**
-   - Visit your GitHub Pages URL
-   - You'll see the expense tracker
+1. **Share the Link**
+   - Send the GitHub Pages URL to your group
+   - Everyone can access the same app
 
-2. **Configure the API**
-   - Click on the **⚙️ Setup** tab
-   - Paste the **Web App URL** you copied from Google Apps Script
-   - Click **💾 Save & Connect**
-   - Click **🔍 Test Connection**
-   - You should see "✅ Connected successfully!"
+2. **Add Participants**
+   - Click **👥 Participants** tab
+   - Add all group members
 
-3. **Start Using!**
-   - Go to **👥 Participants** tab and add your group members
-   - Go to **💰 Expenses** tab and start adding expenses
-   - Go to **🧮 Settlements** tab to see who owes whom
+3. **Track Expenses**
+   - Click **💰 Expenses** tab
+   - Add expenses as they happen
+   - Use checkboxes to select who splits each expense
+
+4. **View Settlements**
+   - Click **🧮 Settlements** tab
+   - See who needs to pay whom and how much
 
 ## 📱 How to Use
 
@@ -135,28 +146,39 @@ Everyone can add expenses and see real-time updates!
 
 ## 🛠️ Troubleshooting
 
-### "Connection failed" error
+### "API URL not configured" error
+- You forgot to update the API_URL in index.html
+- Open index.html, find line 628, and paste your Google Apps Script Web App URL
+- Re-upload to GitHub
+
+### "Connection failed" or data not syncing
 - Make sure you deployed as "Web app" in Apps Script
 - Check "Who has access" is set to "Anyone"
-- Try redeploying: Deploy → Manage deployments → Edit → Deploy
-
-### Data not syncing
-- Check your internet connection
-- Refresh the page (F5)
-- Make sure everyone is using the same website URL
+- Verify the API URL in your index.html is correct
+- Try redeploying: Deploy → Manage deployments → Edit → New version → Deploy
 
 ### Can't see Google Sheet data
 - Open your Google Sheet
 - Check if there are "Participants" and "Expenses" sheets
 - They will be created automatically when you add first participant/expense
+- Make sure the Apps Script is authorized (you may need to re-authorize)
+
+## 🔒 Security & Privacy
+
+- **Repository**: Private (only you can see the code)
+- **Website**: Public URL but only people you share it with will know about it
+- **Google Sheet**: Private to you - people can't directly access it
+- **API**: Public endpoint but only accepts valid data operations
+- **Data**: All expense data stored securely in your private Google Sheet
 
 ## 💡 Tips
 
 - **Mobile Use**: Works great on phones! Save the URL to home screen
 - **Offline**: You can view data offline, but need internet to add new items
 - **Backup**: Your Google Sheet is the backup - all data is there
-- **Privacy**: Only people with the link can access
+- **Edit/Delete**: Can edit or delete any expense after adding
 - **Updates**: To update the app, just upload a new `index.html` to GitHub
+- **API Changes**: If you redeploy the Google Script, update the API_URL in index.html
 
 ## 📊 Example Workflow for Sabarimala Trip
 
